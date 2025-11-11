@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: devops-engineer-from-scratch-project-313
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi[standard]>=0.121.1
+
+### Hexlet tests and linter status:
+[![Actions Status](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions)
