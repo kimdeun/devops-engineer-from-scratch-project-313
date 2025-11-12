@@ -4,8 +4,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v4
-      - run: make build
-      - run: make lint
-      - run: make ping-pong
-      - run: make tests
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: make build
+
+      - name: Lint
+        run: make lint
+
+      - name: Run ping pong on localhost
+        run: make ping-pong
+
+      - name: Run tests
+        run: make tests
