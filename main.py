@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.logger import logger
+from fastapi.testclient import TestClient
+
 
 def main():
     print("Hello from devops-engineer-from-scratch-project-313!")
@@ -13,6 +15,6 @@ app = FastAPI()
 
 
 @app.get("/ping")
-def read_root():
+def get_ping():
     logger.info("Получен запрос, отправляем pong")
-    return 'pong'
+    return "pong"
