@@ -7,14 +7,23 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Sync
+        uses: make sync
+
       - name: Build
         run: make build
-
-      - name: Lint
-        run: make lint
-
+  run:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Run ping pong on localhost
         run: make ping-pong
 
+      - name: Lint
+        run: make lint
+  tests:
+    runs-on: ubuntu-latest
+    needs: [build, run]
+    steps:
       - name: Run tests
         run: make tests
