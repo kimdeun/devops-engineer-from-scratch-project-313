@@ -6,3 +6,4 @@ devops_engineer_from_scratch_project_313.egg-info/SOURCES.txt
 devops_engineer_from_scratch_project_313.egg-info/dependency_links.txt
 devops_engineer_from_scratch_project_313.egg-info/requires.txt
 devops_engineer_from_scratch_project_313.egg-info/top_level.txt
+tests/test_ping_pong.py

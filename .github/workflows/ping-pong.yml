@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v4
       # run – произвольная bash-команда
       # ls -la выведет содержимое текущего репозитория
+      - run: make sync
+      - run: make build
       - run: make lint
       - run: make ping-pong
       - run: make tests
