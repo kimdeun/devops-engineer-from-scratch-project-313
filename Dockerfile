@@ -4,9 +4,17 @@ RUN apt-get update && \
     apt-get install -y make curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.cargo/bin:$PATH"
-RUN uv --version
+    # Пробуем установить uv и смотрим что происходит
+RUN curl -LsSf https://astral.sh/uv/install.sh -o install.sh && \
+chmod +x install.sh && \
+./install.sh || echo "Installation failed"
+
+# Ищем где установился uv
+RUN find / -name "uv" -type f 2>/dev/null | head -10
+
+# Смотрим что в домашней директории
+RUN ls -la /root/ 2>/dev/null || echo "No /root directory"
+RUN ls -la /home/ 2>/dev/null || echo "No /home directory"
 COPY . .
 RUn make install
 RUN make build
