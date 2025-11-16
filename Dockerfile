@@ -1,7 +1,11 @@
 FROM python:3.11-slim
 WORKDIR /
+RUN apt-get update && \
+    apt-get install -y make curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 COPY . .
-RUN apt-get update && apt-get install -y make
 RUn make install
 RUN make build
 RUN make ping-pong
