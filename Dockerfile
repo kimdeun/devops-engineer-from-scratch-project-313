@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
     # Пробуем установить uv и смотрим что происходит
-RUN curl -LsSf https://astral.sh/uv/install.sh -o install.sh && \
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
 RUN uv --version
 
