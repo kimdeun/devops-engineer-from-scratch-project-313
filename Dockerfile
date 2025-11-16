@@ -6,15 +6,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
     # Пробуем установить uv и смотрим что происходит
 RUN curl -LsSf https://astral.sh/uv/install.sh -o install.sh && \
-chmod +x install.sh && \
-./install.sh || echo "Installation failed"
+ENV PATH="/root/.local/bin:$PATH"
+RUN uv --version
 
-# Ищем где установился uv
-RUN find / -name "uv" -type f 2>/dev/null | head -10
-
-# Смотрим что в домашней директории
-RUN ls -la /root/ 2>/dev/null || echo "No /root directory"
-RUN ls -la /home/ 2>/dev/null || echo "No /home directory"
 COPY . .
 RUn make install
 RUN make build
