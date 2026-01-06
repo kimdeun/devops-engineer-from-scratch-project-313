@@ -24,7 +24,7 @@ jobs:
 
       - name: Run ping pong in background
         run: |
-          make ping-pong &
+          make run &
           sleep 3  # ждём пока сервер поднимется
 
       - name: Run tests
