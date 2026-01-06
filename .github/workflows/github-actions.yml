@@ -1,4 +1,4 @@
-name: ping-pong
+name: github-actions
 on: push
 
 jobs:
