@@ -14,16 +14,18 @@ if __name__ == "__main__":
     main()
 
 sentry_sdk.init(
-    dsn=os.getenv('DSN'),
+    dsn=os.getenv("DSN"),
     send_default_pii=True,
 )
 
 app = FastAPI()
 
+
 @app.get("/ping")
 def get_ping():
     logger.info("Получен запрос, отправляем pong")
     return "pong"
+
 
 @app.get("/sentry-debug")
 async def trigger_error():
