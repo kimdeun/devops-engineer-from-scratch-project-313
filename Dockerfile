@@ -10,5 +10,6 @@ RUN uv --version
 
 COPY . .
 RUN make install
-RUN make run
+ENV PORT=8080
 ENV SENTRY_DSN=https://a8c75166e50c7c0f2f844e7e7c4d53ac@o4510374943195136.ingest.de.sentry.io/4510374946078800
+CMD ["make", "run_prod"]
