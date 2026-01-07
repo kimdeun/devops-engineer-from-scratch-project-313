@@ -9,6 +9,7 @@ ENV PATH="/root/.local/bin:$PATH"
 RUN uv --version
 
 COPY . .
+RUN ls -la Makefile
 RUN make install
 RUN make build
 RUN make run
