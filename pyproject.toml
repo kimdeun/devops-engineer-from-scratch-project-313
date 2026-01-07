@@ -14,3 +14,7 @@ dev = [
     "requests>=2.32.5",
     "ruff>=0.14.4",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
