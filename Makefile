@@ -3,7 +3,7 @@ install:
 build:
 	uv build
 run:
-	uv run fastapi dev --host 0.0.0.0 --port 8080
+	uv run fastapi dev ping_pong/main.py --host 0.0.0.0 --port 8080
 tests:
 	uv run pytest
 lint:
