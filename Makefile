@@ -9,4 +9,4 @@ tests:
 lint:
 	uv run ruff format .
 run_prod:
-	uv run uvicorn ping_pong.main:app --port 8080
+	uv run uvicorn ping_pong.main:app --host 0.0.0.0 --port 8080
