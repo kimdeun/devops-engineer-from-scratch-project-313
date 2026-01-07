@@ -1,0 +1,33 @@
+# Игнорировать всё системное и ненужное
+**/.git
+**/.venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+**/node_modules
+**/.dockerignore
+**/.gitignore
+**/.github
+**/.vscode
+**/.idea
+**/*.log
+**/.ruff_cache
+**/.pytest_cache
+**/.coverage
+**/.mypy_cache
+**/dist
+**/build
+**/*.egg-info
+**/Dockerfile
+**/docker-compose.yml
+
+# Системные файлы
+/proc
+/sys
+/dev
+/tmp
+/run
+/mnt
+/media
