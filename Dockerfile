@@ -18,21 +18,23 @@ RUN which uv && uv --version
 
 WORKDIR /
 
-# Копируем файлы проекта
+# Копируем файлы проекта (node_modules исключается через .dockerignore)
 COPY . .
 
 # Устанавливаем зависимости Python
 # Убеждаемся, что используем правильную версию uv
 RUN which uv && uv --version
-# Обновляем uv.lock до версии 0.27.2 для совместимости
-RUN uv lock --upgrade || true
+# Обновляем uv.lock до версии 0.27.2 для совместимости с CI
+RUN uv lock --upgrade
 # Очищаем кэш uv перед установкой
 RUN uv cache clean || true
-# Устанавливаем зависимости, явно указывая путь к uv
-RUN /usr/local/bin/uv sync
+# Устанавливаем зависимости
+RUN uv sync
 
 # Устанавливаем зависимости npm
-RUN npm install
+# Удаляем node_modules если они были скопированы, и переустанавливаем
+RUN rm -rf node_modules 2>/dev/null || true
+RUN npm ci --omit=dev || npm install
 
 # Собираем статику фронтенда
 # Создаем директорию для статики
