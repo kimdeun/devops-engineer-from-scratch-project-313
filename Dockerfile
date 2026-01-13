@@ -6,10 +6,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Установка uv
+# Установка uv (последняя стабильная версия)
+# Удаляем старые версии uv, если они есть
+RUN rm -rf ~/.cargo/bin/uv ~/.local/bin/uv /usr/local/bin/uv 2>/dev/null || true
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
-RUN uv --version
+# Проверяем версию uv и убеждаемся, что используется правильный бинарник
+RUN which uv && uv --version
 
 WORKDIR /
 
@@ -17,6 +20,10 @@ WORKDIR /
 COPY . .
 
 # Устанавливаем зависимости Python
+# Переустанавливаем uv после копирования файлов для синхронизации версий
+RUN rm -rf ~/.cargo/bin/uv ~/.local/bin/uv /usr/local/bin/uv 2>/dev/null || true && \
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    uv cache clean || true
 RUN make install
 
 # Устанавливаем зависимости npm
