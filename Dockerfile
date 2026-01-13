@@ -6,12 +6,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Копируем конкретную версию uv (0.25.11) из официального образа
-COPY --from=ghcr.io/astral-sh/uv:0.25.11 /uv /usr/local/bin/uv
+# Копируем конкретную версию uv (0.27.2) из официального образа для совместимости с CI
+# Удаляем все возможные старые версии uv
+RUN rm -rf ~/.cargo/bin/uv ~/.local/bin/uv /usr/local/bin/uv /usr/bin/uv /bin/uv 2>/dev/null || true
+COPY --from=ghcr.io/astral-sh/uv:0.27.2 /uv /usr/local/bin/uv
 RUN chmod +x /usr/local/bin/uv
-ENV PATH="/usr/local/bin:$PATH"
-# Проверяем версию uv
-RUN uv --version
+# Убеждаемся, что PATH настроен правильно и uv доступен
+ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+# Проверяем версию uv и путь к нему
+RUN which uv && uv --version
 
 WORKDIR /
 
@@ -19,9 +22,14 @@ WORKDIR /
 COPY . .
 
 # Устанавливаем зависимости Python
+# Убеждаемся, что используем правильную версию uv
+RUN which uv && uv --version
+# Обновляем uv.lock до версии 0.27.2 для совместимости
+RUN uv lock --upgrade || true
 # Очищаем кэш uv перед установкой
 RUN uv cache clean || true
-RUN make install
+# Устанавливаем зависимости, явно указывая путь к uv
+RUN /usr/local/bin/uv sync
 
 # Устанавливаем зависимости npm
 RUN npm install
