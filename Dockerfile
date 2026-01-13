@@ -24,17 +24,16 @@ COPY . .
 # Устанавливаем зависимости Python
 # Убеждаемся, что используем правильную версию uv
 RUN which uv && uv --version
-# Обновляем uv.lock до версии 0.9.24 для совместимости
-RUN uv lock --upgrade
 # Очищаем кэш uv перед установкой
 RUN uv cache clean || true
-# Устанавливаем зависимости
-RUN uv sync
+# Устанавливаем зависимости Python через uv sync
+# Если lock файл несовместим, обновляем его
+RUN uv sync 2>&1 || (echo "Lock file may be incompatible, updating..." && uv lock && uv sync)
 
 # Устанавливаем зависимости npm
 # Удаляем node_modules если они были скопированы, и переустанавливаем
 RUN rm -rf node_modules 2>/dev/null || true
-RUN npm ci --omit=dev || npm install
+RUN npm install
 
 # Собираем статику фронтенда
 # Создаем директорию для статики
