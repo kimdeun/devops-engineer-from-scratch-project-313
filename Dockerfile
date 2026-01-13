@@ -6,13 +6,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Копируем конкретную версию uv (0.27.2) из официального образа для совместимости с CI
+# Установка uv версии 0.9.24 через скрипт установки
 # Удаляем все возможные старые версии uv
 RUN rm -rf ~/.cargo/bin/uv ~/.local/bin/uv /usr/local/bin/uv /usr/bin/uv /bin/uv 2>/dev/null || true
-COPY --from=ghcr.io/astral-sh/uv:0.27.2 /uv /usr/local/bin/uv
-RUN chmod +x /usr/local/bin/uv
-# Убеждаемся, что PATH настроен правильно и uv доступен
-ENV PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+# Устанавливаем конкретную версию uv через переменную окружения
+ENV UV_VERSION=0.9.24
+RUN curl -LsSf https://astral.sh/uv/install.sh | UV_VERSION=0.9.24 sh
+ENV PATH="/root/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 # Проверяем версию uv и путь к нему
 RUN which uv && uv --version
 
@@ -24,7 +24,7 @@ COPY . .
 # Устанавливаем зависимости Python
 # Убеждаемся, что используем правильную версию uv
 RUN which uv && uv --version
-# Обновляем uv.lock до версии 0.27.2 для совместимости с CI
+# Обновляем uv.lock до версии 0.9.24 для совместимости
 RUN uv lock --upgrade
 # Очищаем кэш uv перед установкой
 RUN uv cache clean || true
