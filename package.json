@@ -1,0 +1,16 @@
+{
+  "name": "devops-engineer-from-scratch-project-313",
+  "version": "0.1.0",
+  "description": "DevOps project with frontend and backend",
+  "scripts": {
+    "start:frontend": "npx start-hexlet-devops-deploy-crud-frontend",
+    "start:backend": "uv run fastapi dev ping_pong/main.py --host 0.0.0.0 --port 8080",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "dependencies": {
+    "@hexlet/project-devops-deploy-crud-frontend": "^1.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

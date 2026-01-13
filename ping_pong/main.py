@@ -1,9 +1,10 @@
 import os
 from fastapi import FastAPI
 from fastapi.logger import logger
-from fastapi.testclient import TestClient
-from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sentry_sdk
+from ping_pong.database import create_db_and_tables
+from ping_pong.routes import router
 
 
 def main():
@@ -19,6 +20,24 @@ sentry_sdk.init(
 )
 
 app = FastAPI()
+
+# Настройка CORS для клиентских запросов
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Адрес фронтенда
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешаем все методы
+    allow_headers=["*"],  # Разрешаем все заголовки
+)
+
+# Подключаем роуты
+app.include_router(router)
+
+
+# Startup event
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
 
 
 @app.get("/ping")
