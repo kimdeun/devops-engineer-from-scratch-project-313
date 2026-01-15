@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions)
+[![github-actions](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/github-actions.yml/badge.svg)](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/github-actions.yml)
 
 [![ping-pong](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/ping-pong.yml/badge.svg)](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/ping-pong.yml)
 
