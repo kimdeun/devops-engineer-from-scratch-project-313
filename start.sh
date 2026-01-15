@@ -17,8 +17,9 @@ echo "Checking frontend files..."
 ls -la /usr/share/nginx/html/ | head -10 || echo "Warning: Could not list frontend files"
 test -f /usr/share/nginx/html/index.html && echo "index.html found" || echo "ERROR: index.html not found!"
 
-# Запускаем бэкенд в фоне на внутреннем порту 8080
-echo "Starting FastAPI backend on port 8080..."
+# Запускаем бэкенд в фоне на внутреннем порту 8000 (не конфликтует с PORT от Render)
+BACKEND_PORT=8000
+echo "Starting FastAPI backend on internal port $BACKEND_PORT..."
 echo "Checking DATABASE_URL..."
 if [ -z "$DATABASE_URL" ]; then
     echo "WARNING: DATABASE_URL is not set!"
@@ -28,7 +29,7 @@ fi
 
 # Запускаем бэкенд с подробным логированием
 # Используем Python напрямую через uv, чтобы избежать пересборки пакета
-uv run python -m uvicorn ping_pong.main:app --host 0.0.0.0 --port 8080 > /tmp/backend.log 2>&1 &
+uv run python -m uvicorn ping_pong.main:app --host 0.0.0.0 --port $BACKEND_PORT > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "Backend process started with PID: $BACKEND_PID"
@@ -61,7 +62,7 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     fi
 
     # Проверяем, отвечает ли бэкенд
-    if curl -f http://localhost:8080/ping > /dev/null 2>&1; then
+    if curl -f http://localhost:$BACKEND_PORT/ping > /dev/null 2>&1; then
         echo "Backend is ready!"
         BACKEND_READY=true
         break
@@ -82,8 +83,8 @@ if [ "$BACKEND_READY" = false ]; then
     echo "ERROR: Backend failed to start after $MAX_RETRIES seconds"
     echo "Backend process status:"
     ps aux | grep uvicorn || echo "No uvicorn process found"
-    echo "Port 8080 status:"
-    netstat -tlnp 2>/dev/null | grep 8080 || ss -tlnp 2>/dev/null | grep 8080 || echo "Port 8080 not listening"
+    echo "Port $BACKEND_PORT status:"
+    netstat -tlnp 2>/dev/null | grep $BACKEND_PORT || ss -tlnp 2>/dev/null | grep $BACKEND_PORT || echo "Port $BACKEND_PORT not listening"
     echo "Full backend logs:"
     cat /tmp/backend.log
     exit 1
