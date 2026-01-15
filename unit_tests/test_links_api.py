@@ -2,8 +2,6 @@ import os
 import re
 import pytest
 
-# Устанавливаем DATABASE_URL ДО импорта модулей, которые используют database.py
-# Это нужно, чтобы модуль ping_pong.database не падал при импорте
 if "DATABASE_URL" not in os.environ:
     os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
@@ -21,10 +19,8 @@ from ping_pong.routes import link_to_response
 @pytest.fixture(scope="function")
 def test_db():
     """Создает тестовую базу данных в памяти"""
-    # Импортируем модели ПЕРЕД созданием engine, чтобы они зарегистрировались в metadata
-    from ping_pong.models import Link  # noqa: F401
+    from ping_pong.models import Link
 
-    # Используем StaticPool для SQLite в памяти, чтобы все соединения использовали одну БД
     test_engine = create_engine(
         "sqlite:///:memory:",
         echo=False,
@@ -32,12 +28,10 @@ def test_db():
         poolclass=StaticPool
     )
 
-    # Создаем таблицы - используем metadata из SQLModel
     SQLModel.metadata.create_all(test_engine)
 
     yield test_engine
 
-    # Очищаем после теста
     SQLModel.metadata.drop_all(test_engine)
 
 
