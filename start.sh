@@ -27,7 +27,8 @@ else
 fi
 
 # Запускаем бэкенд с подробным логированием
-uv run uvicorn ping_pong.main:app --host 0.0.0.0 --port 8080 > /tmp/backend.log 2>&1 &
+# Используем Python напрямую через uv, чтобы избежать пересборки пакета
+uv run python -m uvicorn ping_pong.main:app --host 0.0.0.0 --port 8080 > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "Backend process started with PID: $BACKEND_PID"
