@@ -19,7 +19,7 @@ from ping_pong.routes import link_to_response
 @pytest.fixture(scope="function")
 def test_db():
     """Создает тестовую базу данных в памяти"""
-    from ping_pong.models import Link
+    from ping_pong.models import Link  # noqa: F401 - импорт необходим для регистрации модели
 
     test_engine = create_engine(
         "sqlite:///:memory:",
@@ -55,7 +55,7 @@ def test_app(test_db):
                 links = session.exec(select(Link)).all()
                 result = [link_to_response(link) for link in links]
                 if response:
-                    response.headers["Content-Range"] = f"links 0-{len(result)-1}/{total_count}"
+                    response.headers["Content-Range"] = f"links 0-{len(result) - 1}/{total_count}"
                 return result
 
             # Парсим range параметр в формате [start, end]
@@ -345,7 +345,7 @@ def test_update_link_duplicate_short_name(client, base_url_env):
         "original_url": "https://example.com/2",
         "short_name": "link2"
     }
-    create1_response = client.post("/api/links", json=link1_data)
+    client.post("/api/links", json=link1_data)
     create2_response = client.post("/api/links", json=link2_data)
 
     # Пытаемся обновить link2 с short_name от link1

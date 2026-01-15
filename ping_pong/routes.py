@@ -6,9 +6,11 @@ from sqlalchemy.exc import IntegrityError
 from ping_pong import database
 from ping_pong.models import Link, LinkCreate, LinkResponse
 
+
 def get_engine():
     """Получает engine из database модуля"""
     return database.engine
+
 
 router = APIRouter()
 
@@ -36,7 +38,7 @@ def get_links(range_param: Optional[str] = Query(None, alias="range"), response:
             links = session.exec(select(Link)).all()
             result = [link_to_response(link) for link in links]
             if response:
-                response.headers["Content-Range"] = f"links 0-{len(result)-1}/{total_count}"
+                response.headers["Content-Range"] = f"links 0-{len(result) - 1}/{total_count}"
             return result
 
         # Парсим range параметр в формате [start, end]

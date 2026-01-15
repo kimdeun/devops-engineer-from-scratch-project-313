@@ -1,6 +1,6 @@
 import os
 from sqlmodel import SQLModel, create_engine
-from ping_pong.models import Link
+from ping_pong.models import Link  # noqa: F401 - импорт необходим для регистрации модели
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
