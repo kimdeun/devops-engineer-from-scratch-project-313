@@ -20,6 +20,9 @@ RUN which uv && uv --version
 RUN uv cache clean || true
 RUN uv sync 2>&1 || (echo "Lock file may be incompatible, updating..." && uv lock && uv sync)
 
+# Проверяем, что виртуальное окружение создано
+RUN ls -la .venv/bin/python 2>/dev/null || echo "Note: .venv will be created at runtime"
+
 # Устанавливаем зависимости npm для фронтенда
 RUN npm install && \
     echo "npm install completed" && \

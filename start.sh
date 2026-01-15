@@ -28,8 +28,30 @@ else
 fi
 
 # Запускаем бэкенд с подробным логированием
-# Используем Python напрямую через uv, чтобы избежать пересборки пакета
-uv run python -m uvicorn ping_pong.main:app --host 0.0.0.0 --port $BACKEND_PORT > /tmp/backend.log 2>&1 &
+# Убеждаемся, что виртуальное окружение существует
+if [ ! -f "/.venv/bin/python" ] && [ ! -f ".venv/bin/python" ]; then
+    echo "Creating virtual environment..."
+    uv venv .venv || uv venv
+fi
+
+# Используем Python из виртуального окружения
+if [ -f "/.venv/bin/python" ]; then
+    PYTHON_BIN="/.venv/bin/python"
+    echo "Using Python from /.venv: $PYTHON_BIN"
+elif [ -f ".venv/bin/python" ]; then
+    PYTHON_BIN=".venv/bin/python"
+    echo "Using Python from .venv: $PYTHON_BIN"
+else
+    echo "ERROR: Could not find Python in virtual environment"
+    exit 1
+fi
+
+# Убеждаемся, что зависимости установлены
+echo "Syncing dependencies..."
+uv sync --quiet || uv sync
+
+echo "Starting uvicorn with $PYTHON_BIN"
+$PYTHON_BIN -m uvicorn ping_pong.main:app --host 0.0.0.0 --port $BACKEND_PORT > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "Backend process started with PID: $BACKEND_PID"
