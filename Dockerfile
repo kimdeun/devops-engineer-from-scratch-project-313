@@ -13,20 +13,10 @@ ENV UV_VERSION=0.9.24
 RUN curl -LsSf https://astral.sh/uv/install.sh | UV_VERSION=0.9.24 sh
 ENV PATH="/root/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
-RUN which uv && uv --version
-
 WORKDIR /
 
 
 COPY . .
-
-
-RUN which uv && uv --version
-
-RUN uv cache clean || true
-
-RUN uv sync 2>&1 || (echo "Lock file may be incompatible, updating..." && uv lock && uv sync)
-
 
 RUN rm -rf node_modules 2>/dev/null || true
 RUN npm install
