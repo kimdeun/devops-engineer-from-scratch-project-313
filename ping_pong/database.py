@@ -21,8 +21,15 @@ if not DATABASE_URL:
         )
 
 # Нормализуем DATABASE_URL для Render PostgreSQL
-# Render может предоставлять URL без порта или параметров
+# SQLAlchemy 2.0+ требует явного указания драйвера для PostgreSQL
 if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres://"):
+    # Преобразуем postgres:// или postgresql:// в postgresql+psycopg2://
+    # Это явно указывает SQLAlchemy использовать драйвер psycopg2
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif DATABASE_URL.startswith("postgresql://") and "+psycopg2" not in DATABASE_URL:
+        DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
+
     # Если URL не содержит параметры подключения, добавляем sslmode=require для Render
     # Render PostgreSQL требует SSL
     if "?" not in DATABASE_URL:
