@@ -18,17 +18,6 @@ WORKDIR /
 
 COPY . .
 
-RUN rm -rf node_modules 2>/dev/null || true
-RUN npm install
-
-
-RUN mkdir -p /usr/share/nginx/html
-
-RUN npx --yes @hexlet/project-devops-deploy-crud-frontend build /usr/share/nginx/html 2>&1 || \
-    npx --yes @hexlet/project-devops-deploy-crud-frontend export /usr/share/nginx/html 2>&1 || \
-    (echo "Frontend static files not found, will be generated at runtime" && \
-     echo '<!DOCTYPE html><html><head><title>Loading...</title></head><body><h1>Frontend Loading...</h1></body></html>' > /usr/share/nginx/html/index.html)
-
 COPY nginx.conf /etc/nginx/nginx.conf
 
 ENV PORT=80
