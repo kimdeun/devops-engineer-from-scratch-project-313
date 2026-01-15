@@ -6,7 +6,6 @@ from sqlalchemy.exc import IntegrityError
 from ping_pong import database
 from ping_pong.models import Link, LinkCreate, LinkResponse
 
-# Используем engine из database модуля
 def get_engine():
     """Получает engine из database модуля"""
     return database.engine

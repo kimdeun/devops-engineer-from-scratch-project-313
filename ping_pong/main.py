@@ -21,9 +21,7 @@ sentry_sdk.init(
 
 app = FastAPI()
 
-# Настройка CORS для клиентских запросов
-# На PaaS фронтенд может быть на другом домене, поэтому разрешаем все origins
-# В продакшене можно ограничить конкретными доменами через переменную окружения CORS_ORIGINS
+
 cors_origins_env = os.getenv("CORS_ORIGINS", "*")
 if cors_origins_env == "*":
     cors_origins = ["*"]
@@ -34,15 +32,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Разрешаем все методы
-    allow_headers=["*"],  # Разрешаем все заголовки
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Подключаем роуты
 app.include_router(router)
 
 
-# Startup event
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
