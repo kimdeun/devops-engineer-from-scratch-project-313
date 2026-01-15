@@ -30,7 +30,6 @@ def link_to_response(link: Link) -> LinkResponse:
 def get_links(range_param: Optional[str] = Query(None, alias="range"), response: Response = None):
     """Возвращает список всех ссылок с поддержкой пагинации"""
     with Session(get_engine()) as session:
-        # Получаем общее количество записей
         total_count = session.exec(select(func.count(Link.id))).one()
 
         # Если range не указан, возвращаем все записи
@@ -59,18 +58,12 @@ def get_links(range_param: Optional[str] = Query(None, alias="range"), response:
                 detail="Invalid range: start must be >= 0 and end must be >= start"
             )
 
-        # Вычисляем limit (количество записей для возврата)
-        # range [0, 10] означает записи с индексами 0-10 включительно, т.е. 11 записей
         limit = end - start + 1
         offset = start
 
-        # Получаем записи с пагинацией
         links = session.exec(select(Link).offset(offset).limit(limit)).all()
         result = [link_to_response(link) for link in links]
 
-        # Устанавливаем заголовок Content-Range
-        # Формат: links start-end/total
-        # Если записей нет, end = start - 1 (или 0 если start = 0)
         if len(result) > 0:
             actual_end = start + len(result) - 1
         else:

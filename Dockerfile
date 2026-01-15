@@ -1,6 +1,5 @@
 FROM python:3.14-slim
 
-# Установка системных зависимостей (nginx для проксирования и раздачи статики, nodejs/npm для фронтенда)
 RUN apt-get update && \
     apt-get install -y make curl nginx nodejs npm && \
     apt-get clean && \
@@ -12,7 +11,6 @@ ENV PATH="/root/.local/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
 WORKDIR /
 
-# Копируем файлы проекта
 COPY . .
 
 # Устанавливаем зависимости Python
@@ -52,14 +50,12 @@ RUN mkdir -p /usr/share/nginx/html && \
         exit 1; \
     fi
 
-# Копируем конфигурацию Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Переменные окружения
 # PORT=80 для Render (Render будет передавать свой PORT, но по умолчанию используем 80)
 ENV PORT=80
 
-# Копируем скрипт запуска
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 

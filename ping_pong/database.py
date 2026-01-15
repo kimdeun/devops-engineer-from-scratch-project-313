@@ -37,7 +37,6 @@ if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres
     elif "sslmode" not in DATABASE_URL:
         DATABASE_URL = f"{DATABASE_URL}&sslmode=require"
 
-# Создаем engine с увеличенными таймаутами для подключения к БД
 engine = create_engine(
     DATABASE_URL,
     echo=True,
