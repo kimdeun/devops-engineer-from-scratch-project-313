@@ -3,7 +3,7 @@
 
 [![ping-pong](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/ping-pong.yml/badge.svg)](https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/workflows/ping-pong.yml)
 
-https://devops-engineer-from-scratch-project-313-j60r.onrender.com/
+[https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/runs/21041100603/job/60502829730](https://devops-engineer-from-scratch-project-313-zxs8.onrender.com/#/links)
 
 Запустить проект:
 
