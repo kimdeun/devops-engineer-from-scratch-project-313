@@ -1,6 +1,12 @@
 import os
 import re
 import pytest
+
+# Устанавливаем DATABASE_URL ДО импорта модулей, которые используют database.py
+# Это нужно, чтобы модуль ping_pong.database не падал при импорте
+if "DATABASE_URL" not in os.environ:
+    os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+
 from typing import Optional
 from fastapi.testclient import TestClient
 from fastapi import Query, Response
