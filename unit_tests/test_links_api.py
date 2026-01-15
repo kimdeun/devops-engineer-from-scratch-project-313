@@ -13,8 +13,6 @@ from ping_pong.models import Link  # noqa: F401 - импорт необходи�
 @pytest.fixture(scope="function")
 def test_db():
     """Создает тестовую базу данных в памяти"""
-    from ping_pong.models import Link  # noqa: F401 - импорт необходим для регистрации модели
-
     test_engine = create_engine(
         "sqlite:///:memory:",
         echo=False,
