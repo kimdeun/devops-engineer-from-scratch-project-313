@@ -4,6 +4,8 @@
 
 [https://github.com/kimdeun/devops-engineer-from-scratch-project-313/actions/runs/21041100603/job/60502829730](https://devops-engineer-from-scratch-project-313-zxs8.onrender.com/#/links)
 
+Проект - https://devops-engineer-from-scratch-project-313-zxs8.onrender.com
+
 Запустить проект:
 
 make install
