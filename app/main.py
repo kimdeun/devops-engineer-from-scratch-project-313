@@ -3,16 +3,9 @@ from fastapi import FastAPI
 from fastapi.logger import logger
 from fastapi.middleware.cors import CORSMiddleware
 import sentry_sdk
-from ping_pong.database import create_db_and_tables
-from ping_pong.routes import router
+from app.database import create_db_and_tables
+from app.routes import router
 
-
-def main():
-    print("Hello from devops-engineer-from-scratch-project-313!")
-
-
-if __name__ == "__main__":
-    main()
 
 sentry_sdk.init(
     dsn=os.getenv("DSN"),
@@ -48,8 +41,3 @@ def on_startup():
 def get_ping():
     logger.info("Получен запрос, отправляем pong")
     return "pong"
-
-
-@app.get("/sentry-debug")
-async def trigger_error():
-    1 / 0  # noqa: F841

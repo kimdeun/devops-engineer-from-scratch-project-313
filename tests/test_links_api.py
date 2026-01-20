@@ -7,7 +7,7 @@ if "DATABASE_URL" not in os.environ:
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine
 from sqlalchemy.pool import StaticPool
-from ping_pong.models import Link  # noqa: F401 - импорт необходим для регистрации модели
+from app.models import Link  # noqa: F401
 
 
 @pytest.fixture(scope="function")
@@ -31,8 +31,8 @@ def test_db():
 def test_app(test_db, monkeypatch):
     """Создает тестовое приложение с тестовой БД"""
     from fastapi import FastAPI
-    from ping_pong import database
-    from ping_pong.routes import router
+    from app import database
+    from app.routes import router
 
     # Подменяем engine в модуле database на тестовый
     monkeypatch.setattr(database, "engine", test_db)

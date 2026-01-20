@@ -1,11 +1,11 @@
 import os
+import sys
 from sqlmodel import SQLModel, create_engine
-from ping_pong.models import Link  # noqa: F401 - импорт необходим для регистрации модели
+from app.models import Link  # noqa: F401
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    import sys
     is_testing = (
         "pytest" in sys.modules or
         "PYTEST_CURRENT_TEST" in os.environ
@@ -20,18 +20,12 @@ if not DATABASE_URL:
             "postgres://user:password@host:5432/dbname?sslmode=disable"
         )
 
-# Нормализуем DATABASE_URL для Render PostgreSQL
-# SQLAlchemy 2.0+ требует явного указания драйвера для PostgreSQL
 if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres://"):
-    # Преобразуем postgres:// или postgresql:// в postgresql+psycopg2://
-    # Это явно указывает SQLAlchemy использовать драйвер psycopg2
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
     elif DATABASE_URL.startswith("postgresql://") and "+psycopg2" not in DATABASE_URL:
         DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 
-    # Если URL не содержит параметры подключения, добавляем sslmode=require для Render
-    # Render PostgreSQL требует SSL
     if "?" not in DATABASE_URL:
         DATABASE_URL = f"{DATABASE_URL}?sslmode=require"
     elif "sslmode" not in DATABASE_URL:
@@ -40,22 +34,19 @@ if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres
 engine = create_engine(
     DATABASE_URL,
     echo=True,
-    pool_pre_ping=True,  # Проверяем соединение перед использованием
-    pool_recycle=300,    # Переиспользуем соединения каждые 5 минут
+    pool_pre_ping=True,
+    pool_recycle=300,
     connect_args={
-        "connect_timeout": 10,  # Таймаут подключения 10 секунд
+        "connect_timeout": 10,
     }
 )
 
 
 def create_db_and_tables():
-    """Создает все таблицы в базе данных"""
     try:
         SQLModel.metadata.create_all(engine)
         print("Database tables created successfully")
     except Exception as e:
         print(f"Warning: Failed to create database tables: {e}")
-        # Не прерываем запуск приложения, если таблицы уже существуют
-        # или есть другие проблемы с БД
         import traceback
         traceback.print_exc()

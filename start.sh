@@ -51,7 +51,7 @@ echo "Syncing dependencies..."
 uv sync --quiet || uv sync
 
 echo "Starting uvicorn with $PYTHON_BIN"
-$PYTHON_BIN -m uvicorn ping_pong.main:app --host 0.0.0.0 --port $BACKEND_PORT > /tmp/backend.log 2>&1 &
+$PYTHON_BIN -m uvicorn app.main:app --host 0.0.0.0 --port $BACKEND_PORT > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "Backend process started with PID: $BACKEND_PID"

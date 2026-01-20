@@ -50,7 +50,7 @@ RUN mkdir -p /usr/share/nginx/html && \
         exit 1; \
     fi
 
-COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Переменные окружения
 # PORT=80 для Render (Render будет передавать свой PORT, но по умолчанию используем 80)
