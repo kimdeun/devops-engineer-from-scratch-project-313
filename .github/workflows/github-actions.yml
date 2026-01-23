@@ -27,7 +27,7 @@ jobs:
           DATABASE_URL: sqlite:///:memory:
         run: |
           export DATABASE_URL=sqlite:///:memory:
-          make run_backend &
+          bash -c 'make run_backend &'
           sleep 5
           curl -f http://localhost:8080/ping || exit 1
 
