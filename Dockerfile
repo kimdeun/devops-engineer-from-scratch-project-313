@@ -22,21 +22,21 @@ RUN uv sync 2>&1 || (echo "Lock file may be incompatible, updating..." && uv loc
 RUN ls -la .venv/bin/python 2>/dev/null || echo "Note: .venv will be created at runtime"
 
 # Копируем статику фронтенда в директорию для nginx
-# Предполагается, что фронтенд собран локально и находится в frontend-dist/
+# Фронтенд должен быть собран локально командой: make build-frontend
 RUN mkdir -p /usr/share/nginx/html && \
     if [ -d "./frontend-dist" ]; then \
         cp -r ./frontend-dist/. /usr/share/nginx/html/ && \
         chown -R www-data:www-data /usr/share/nginx/html && \
-        chmod -R 755 /usr/share/nginx/html; \
+        chmod -R 755 /usr/share/nginx/html && \
+        echo "Frontend static files copied successfully"; \
     else \
-        echo "ERROR: frontend-dist directory not found! Please build frontend locally." && \
+        echo "ERROR: frontend-dist directory not found!" && \
+        echo "Please build frontend locally first: make build-frontend" && \
         exit 1; \
     fi
 
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
-# Переменные окружения
-# PORT=80 для Render (Render будет передавать свой PORT, но по умолчанию используем 80)
 ENV PORT=80
 
 COPY start.sh /start.sh
