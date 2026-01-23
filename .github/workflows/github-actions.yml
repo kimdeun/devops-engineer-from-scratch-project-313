@@ -23,11 +23,13 @@ jobs:
         run: make lint
 
       - name: Run ping pong in background
+        env:
+          DATABASE_URL: sqlite:///:memory:
         run: |
+          export DATABASE_URL=sqlite:///:memory:
           make run_backend &
-          sleep 5  # ждём пока сервер поднимется
+          sleep 5
           curl -f http://localhost:8080/ping || exit 1
 
       - name: Run tests
         run: make tests
-        continue-on-error: false
