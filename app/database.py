@@ -48,5 +48,4 @@ def create_db_and_tables():
         print("Database tables created successfully")
     except Exception as e:
         print(f"Warning: Failed to create database tables: {e}")
-        import traceback
-        traceback.print_exc()
+        raise

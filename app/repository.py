@@ -22,14 +22,14 @@ class LinkRepository:
             return session.exec(select(func.count(Link.id))).one()
 
     @staticmethod
-    def get_all() -> list[Link]:
+    def get_all(offset: Optional[int] = None, limit: Optional[int] = None) -> list[Link]:
         with Session(engine) as session:
-            return session.exec(select(Link)).all()
-
-    @staticmethod
-    def get_paginated(offset: int, limit: int) -> list[Link]:
-        with Session(engine) as session:
-            return session.exec(select(Link).offset(offset).limit(limit)).all()
+            query = select(Link)
+            if offset is not None:
+                query = query.offset(offset)
+            if limit is not None:
+                query = query.limit(limit)
+            return session.exec(query).all()
 
     @staticmethod
     def get_by_id(link_id: int) -> Optional[Link]:

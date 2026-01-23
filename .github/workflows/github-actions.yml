@@ -24,8 +24,9 @@ jobs:
 
       - name: Run ping pong in background
         run: |
-          make run &
-          sleep 3  # ждём пока сервер поднимется
+          make run_backend &
+          sleep 5  # ждём пока сервер поднимется
+          curl -f http://localhost:8080/ping || exit 1
 
       - name: Run tests
-        run: make tests
+        run: uv run pytest -v

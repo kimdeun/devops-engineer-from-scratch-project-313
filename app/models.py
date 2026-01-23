@@ -5,7 +5,6 @@ from sqlmodel import SQLModel, Field
 
 
 def get_base_url() -> str:
-    """Получает базовый URL из переменной окружения"""
     return os.getenv("BASE_URL", "https://short.io")
 
 

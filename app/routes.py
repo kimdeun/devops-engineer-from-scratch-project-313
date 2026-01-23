@@ -38,7 +38,7 @@ def get_links(range_param: Optional[str] = Query(None, alias="range"), response:
     limit = end - start + 1
     offset = start
 
-    links = LinkRepository.get_paginated(offset, limit)
+    links = LinkRepository.get_all(offset=offset, limit=limit)
     result = [link_to_response(link) for link in links]
 
     if len(result) > 0:
