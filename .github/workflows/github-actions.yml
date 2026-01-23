@@ -25,10 +25,7 @@ jobs:
       - name: Run ping pong in background
         env:
           DATABASE_URL: sqlite:///:memory:
-        run: |
-          make run_backend &
-          sleep 5  # ждём пока сервер поднимется
-          curl -f http://localhost:8080/ping || exit 1
+        run: bash -c "make run_backend & sleep 5 && curl -f http://localhost:8080/ping || exit 1"
 
       - name: Run tests
         run: make tests
