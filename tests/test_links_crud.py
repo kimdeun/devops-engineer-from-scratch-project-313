@@ -1,7 +1,3 @@
-import pytest
-from fastapi.testclient import TestClient
-
-
 def test_get_links_empty(client):
     """Тест получения пустого списка ссылок"""
     response = client.get("/api/links")

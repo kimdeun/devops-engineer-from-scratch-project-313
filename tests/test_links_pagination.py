@@ -1,7 +1,3 @@
-import pytest
-from fastapi.testclient import TestClient
-
-
 def test_get_links_pagination_first_10(client, base_url_env):
     """Тест пагинации: получение первых 10 записей"""
     # Создаем 15 ссылок

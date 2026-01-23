@@ -1,7 +1,3 @@
-import pytest
-from fastapi.testclient import TestClient
-
-
 def test_create_link_duplicate_short_name(client, base_url_env):
     """Тест создания ссылки с дублирующимся short_name"""
     link_data = {
