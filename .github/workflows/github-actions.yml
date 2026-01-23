@@ -4,7 +4,7 @@ on: push
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -25,7 +25,10 @@ jobs:
       - name: Run ping pong in background
         env:
           DATABASE_URL: sqlite:///:memory:
-        run: bash -c "make run_backend & sleep 5 && curl -f http://localhost:8080/ping || exit 1"
+        run: |
+          bash -c "make run_backend &"
+          sleep 5
+          curl -f http://localhost:8080/ping || exit 1
 
       - name: Run tests
         run: make tests
