@@ -24,10 +24,10 @@ jobs:
 
       - name: Run ping pong in background
         env:
-          DATABASE_URL: sqlite:///:memory:
+          DATABASE_URL: "sqlite:///:memory:"
         run: |
-          export DATABASE_URL=sqlite:///:memory:
-          bash -c 'make run_backend &'
+          export DATABASE_URL="sqlite:///:memory:"
+          bash -c "make run_backend &"
           sleep 5
           curl -f http://localhost:8080/ping || exit 1
 
