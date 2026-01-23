@@ -31,15 +31,22 @@ if DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres
     elif "sslmode" not in DATABASE_URL:
         DATABASE_URL = f"{DATABASE_URL}&sslmode=require"
 
-engine = create_engine(
-    DATABASE_URL,
-    echo=True,
-    pool_pre_ping=True,
-    pool_recycle=300,
-    connect_args={
-        "connect_timeout": 10,
-    }
-)
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(
+        DATABASE_URL,
+        echo=True,
+        connect_args={"check_same_thread": False}
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        echo=True,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={
+            "connect_timeout": 10,
+        }
+    )
 
 
 def create_db_and_tables():
