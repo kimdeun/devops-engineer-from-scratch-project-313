@@ -1,6 +1,7 @@
 import re
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status, Query, Response
+from fastapi.responses import RedirectResponse
 from sqlalchemy.exc import IntegrityError
 from app.models import LinkCreate, LinkResponse
 from app.repository import LinkRepository, link_to_response
@@ -123,3 +124,15 @@ def delete_link(link_id: int):
             detail="Link not found"
         )
     return None
+
+
+@router.get("/r/{short_name}")
+def redirect_link(short_name: str):
+    """Редирект на оригинальную ссылку по короткому имени"""
+    link = LinkRepository.get_by_short_name(short_name)
+    if not link:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Link not found"
+        )
+    return RedirectResponse(url=link.original_url, status_code=status.HTTP_302_FOUND)

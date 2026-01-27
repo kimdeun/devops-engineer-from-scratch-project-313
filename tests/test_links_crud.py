@@ -193,3 +193,26 @@ def test_short_url_format(client, base_url_env):
     data = response.json()
     assert data["short_url"] == "https://test-short.io/r/test123"
     assert data["short_url"].startswith("https://test-short.io/r/")
+
+
+def test_redirect_link_success(client, base_url_env):
+    """Тест успешного редиректа по короткой ссылке"""
+    # Создаем ссылку
+    link_data = {
+        "original_url": "https://example.com/long-url",
+        "short_name": "redirect-test"
+    }
+    create_response = client.post("/api/links", json=link_data)
+    assert create_response.status_code == 201
+
+    # Проверяем редирект
+    response = client.get("/r/redirect-test", follow_redirects=False)
+    assert response.status_code == 302
+    assert response.headers["location"] == "https://example.com/long-url"
+
+
+def test_redirect_link_not_found(client):
+    """Тест редиректа несуществующей ссылки"""
+    response = client.get("/r/nonexistent")
+    assert response.status_code == 404
+    assert "Link not found" in response.json()["detail"]
